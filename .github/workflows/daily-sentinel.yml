@@ -1,0 +1,53 @@
+# ══════════════════════════════════════════════════════════
+# StarBrief — Daily Sentinel Workflow
+# Runs every day at 2:00 AM IST (8:30 PM UTC previous day)
+# Checks known URLs for status changes + collects breadcrumbs
+# ══════════════════════════════════════════════════════════
+
+name: "⭐ Daily Sentinel"
+
+on:
+  schedule:
+    - cron: "30 20 * * *"          # 2:00 AM IST = 8:30 PM UTC
+  workflow_dispatch:                 # manual trigger for testing
+
+permissions:
+  contents: read
+
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+jobs:
+  daily-sentinel:
+    name: "Run Daily Sentinel"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15              # budget: 10-15 min
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily sentinel
+        run: python -m pipeline.daily
+
+      - name: Notify dashboard (optional)
+        if: success()
+        run: |
+          if [ -n "${{ secrets.WEBHOOK_SECRET }}" ]; then
+            curl -s -X POST "${{ secrets.VERCEL_URL }}/api/trigger/daily" \
+              -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+              -H "Content-Type: application/json" \
+              -d '{"source": "github_actions", "run_type": "daily"}'
+          fi
+        continue-on-error: true

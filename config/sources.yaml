@@ -1,0 +1,173 @@
+# ══════════════════════════════════════════════════════════
+# StarBrief — Scraper Source Configuration
+# Each scraper has its own entry with URLs, toggles, and rate limits.
+# ══════════════════════════════════════════════════════════
+
+sources:
+
+  # ─── Phase 1: Core 6 Scrapers ───
+
+  internshala:
+    name: "Internshala"
+    enabled: true
+    base_url: "https://internshala.com/internships/computer-science-internship/"
+    method: "httpx_bs4"                 # httpx + BeautifulSoup
+    supports_daily: true
+    supports_weekly: true
+    daily_pages: 1                       # first page only
+    weekly_pages: 5                      # paginate 5 deep
+    rate_limit_seconds: 3.0              # aggressive limiting
+    rotate_user_agent: true
+    filters:
+      - "computer-science"
+      - "AI"
+      - "machine-learning"
+      - "data-science"
+      - "remote"
+
+  unstop:
+    name: "Unstop"
+    enabled: true
+    base_url: "https://unstop.com"
+    api_endpoint: "https://unstop.com/api/public/opportunity/search-new"
+    method: "api"                        # prefer API over scraping
+    supports_daily: true
+    supports_weekly: true
+    rate_limit_seconds: 1.5
+    categories:
+      - "hackathons"
+      - "competitions"
+      - "internships"
+
+  devpost:
+    name: "DevPost"
+    enabled: true
+    base_url: "https://devpost.com/hackathons"
+    method: "httpx_bs4"
+    supports_daily: true
+    supports_weekly: true
+    daily_pages: 1
+    weekly_pages: 3
+    rate_limit_seconds: 1.0
+    status_filters:
+      - "upcoming"
+      - "open"
+    theme_filters:
+      - "Artificial Intelligence"
+      - "Machine Learning"
+      - "Data"
+      - "Health"
+      - "Social Good"
+
+  mlh:
+    name: "MLH"
+    enabled: true
+    base_url: "https://mlh.io/seasons/2026/events"
+    method: "httpx_bs4"
+    supports_daily: true
+    supports_weekly: true
+    rate_limit_seconds: 1.0
+
+  github_issues:
+    name: "GitHub Issues"
+    enabled: true
+    base_url: "https://api.github.com/search/issues"
+    method: "api"
+    supports_daily: true
+    supports_weekly: true
+    rate_limit_seconds: 0.5              # 5000 req/hr with PAT
+    daily_query: 'label:"good first issue" language:python created:>{yesterday}'
+    weekly_labels:
+      - "good first issue"
+      - "help wanted"
+    watched_repos:
+      - "langchain-ai/langchain"
+      - "huggingface/transformers"
+      - "pytorch/pytorch"
+      - "scikit-learn/scikit-learn"
+      - "fastapi/fastapi"
+      - "keras-team/keras"
+
+  konfhub:
+    name: "Konfhub"
+    enabled: true
+    base_url: "https://konfhub.com/events"
+    method: "httpx_bs4"
+    supports_daily: false                # events don't change daily
+    supports_weekly: true
+    rate_limit_seconds: 1.5
+    topic_filters:
+      - "AI"
+      - "ML"
+      - "Cloud"
+      - "Data"
+
+  # ─── Phase 2 Scrapers (disabled) ───
+
+  townscript:
+    name: "Townscript"
+    enabled: false
+    base_url: "https://www.townscript.com/in/online/technology"
+    method: "httpx_bs4"
+    supports_daily: false
+    supports_weekly: true
+
+  luma:
+    name: "Luma"
+    enabled: false
+    base_url: "https://lu.ma/discover"
+    method: "playwright"                 # JS-rendered
+    supports_daily: false
+    supports_weekly: true
+
+  iit_iisc:
+    name: "IIT/IISc Research Programs"
+    enabled: false
+    method: "httpx_bs4"
+    supports_daily: false
+    supports_weekly: true
+    urls:
+      - "https://iisc.ac.in/spark/"
+      - "https://www.iitb.ac.in/en/education/summer-research-fellowship"
+      - "https://surge.iitk.ac.in/"
+
+  reddit:
+    name: "Reddit"
+    enabled: false
+    method: "api"
+    supports_daily: false
+    supports_weekly: true
+    subreddits:
+      - "Indian_Academia"
+      - "developersIndia"
+      - "cscareerquestions"
+      - "MachineLearning"
+
+  linkedin_serp:
+    name: "LinkedIn Jobs (SerpAPI)"
+    enabled: false
+    method: "serpapi"
+    supports_daily: false
+    supports_weekly: true
+
+  google_jobs:
+    name: "Google Jobs (SerpAPI)"
+    enabled: false
+    method: "serpapi"
+    supports_daily: false
+    supports_weekly: true
+
+  twitter:
+    name: "Twitter/X"
+    enabled: false
+    method: "httpx_nitter"
+    supports_daily: false
+    supports_weekly: true
+
+  conferences:
+    name: "Conference Aggregators"
+    enabled: false
+    base_url: "https://confs.tech"
+    method: "httpx_bs4"
+    supports_daily: false
+    supports_weekly: true

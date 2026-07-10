@@ -1,0 +1,79 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px dashed var(--border-dark);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.labelGroup {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.org {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-dark-dim);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track {
+  flex: 1;
+  position: relative;
+  height: 24px;
+  background: transparent;
+  border-radius: var(--radius-none);
+  border: 1px solid var(--border-dark);
+  overflow: hidden;
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20%; /* Demo */
+  cursor: pointer;
+  border-right: 1px solid var(--border-dark);
+  border-left: 1px solid var(--border-dark);
+  transition: background 0.1s;
+}
+
+.bar:hover {
+  filter: brightness(0.9);
+}
+
+.barEvent {
+  border-radius: var(--radius-none);
+}
+
+.barDuration {
+  border-radius: var(--radius-none);
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .labelGroup {
+    width: 120px;
+  }
+}

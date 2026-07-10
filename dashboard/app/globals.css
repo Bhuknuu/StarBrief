@@ -1,0 +1,288 @@
+/**
+ * StarBrief — Global Styles
+ * ═══════════════════════════════════════════════════════════
+ * Design System: "Accessible Neo-Brutalist"
+ * Focus: 100% WCAG Contrast legibility, clean typography.
+ * ═══════════════════════════════════════════════════════════
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap");
+
+:root {
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  
+  --text-xs:   clamp(0.7rem, 0.5vw + 0.5rem, 0.75rem);
+  --text-sm:   clamp(0.8rem, 0.8vw + 0.5rem, 0.875rem);
+  --text-base: clamp(1rem, 1vw + 0.5rem, 1.125rem);
+  --text-md:   clamp(1.125rem, 1.5vw + 0.5rem, 1.25rem);
+  --text-lg:   clamp(1.25rem, 2vw + 0.5rem, 1.5rem);
+  --text-xl:   clamp(1.75rem, 3vw + 0.5rem, 2.5rem);
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-bold:    700;
+  --weight-black:   900;
+
+  /* Spacing */
+  --space-1: clamp(2px, 0.5vw, 4px);
+  --space-2: clamp(4px, 1vw, 8px);
+  --space-3: clamp(8px, 1.5vw, 12px);
+  --space-4: clamp(12px, 2vw, 16px);
+  --space-5: clamp(16px, 3vw, 24px);
+  --space-6: clamp(24px, 4vw, 32px);
+  --space-8: clamp(32px, 6vw, 48px);
+
+  --sidebar-width: clamp(240px, 20vw, 300px);
+
+  --radius-none: 0px;
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-pill: 9999px;
+
+  /* 
+   * LIGHT MODE
+   * High contrast against light backgrounds.
+   */
+  --bg-workspace: #f6f3ed;
+  --bg-sidebar:   #eee9de;
+  --bg-card:      #ffffff;
+  --bg-card-hover:#fdfcf9;
+  
+  --text-light:       #111111; /* Pure black/ink */
+  --text-light-dim:   #555555; /* Strong dark grey */
+  --text-dark:        #111111; 
+  --text-dark-dim:    #555555;
+
+  --border-light: #cccccc;
+  --border-dark:  #111111;
+  --border-subtle: #dddddd;
+
+  /* ACCESSIBLE HIGH-CONTRAST ACCENTS FOR LIGHT MODE */
+  --bg-accent:        #D90036; /* Deep Crimson */
+  --text-accent:      #D90036;
+
+  /* EVENT CATEGORIES (Taxonomy) */
+  --cat-internship:   #0044CC; /* Royal Blue */
+  --cat-hackathon:    #800080; /* Deep Magenta/Purple */
+  --cat-workshop:     #006666; /* Deep Teal */
+  --cat-conference:   #330099; /* Deep Indigo */
+  --cat-open-source:  #A64D00; /* Deep Rust/Burnt Orange */
+  --cat-research:     #111111; /* Ink Black */
+
+  /* SEVERITY & URGENCY (Priority) */
+  --priority-critical: #D90000; /* Traffic Red */
+  --priority-high:     #CC5500; /* Traffic Orange */
+  --priority-medium:   #B38F00; /* Dark Gold/Mustard */
+  --priority-low:      #556677; /* Slate Grey (Low Urgency) */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 
+     * DARK MODE
+     * High contrast against dark backgrounds.
+     */
+    --bg-workspace: #1a1918;
+    --bg-sidebar:   #211f1d;
+    --bg-card:      #2b2826;
+    --bg-card-hover:#33302c;
+    
+    --text-light:       #f6f3ed; /* Crisp oat */
+    --text-light-dim:   #c4beb4; /* Lighter grey for visibility */
+    --text-dark:        #f6f3ed; 
+    --text-dark-dim:    #c4beb4;
+    
+    --border-light: #444444;
+    --border-dark:  #000000; 
+    --border-subtle: #444444;
+
+    /* BRIGHTER ACCENTS FOR DARK MODE VISIBILITY */
+    --bg-accent:        #FF4D79;
+    --text-accent:      #FF4D79;
+    
+    /* BRIGHTER CATEGORIES FOR DARK MODE */
+    --cat-internship:   #4D94FF; 
+    --cat-hackathon:    #FF4DFF; 
+    --cat-workshop:     #33CCCC; 
+    --cat-conference:   #9966FF; 
+    --cat-open-source:  #FF8C42; 
+    --cat-research:     #FFFFFF; 
+
+    /* BRIGHTER SEVERITY FOR DARK MODE */
+    --priority-critical: #FF4D4D; /* Alert Red */
+    --priority-high:     #FF9933; /* Alert Orange */
+    --priority-medium:   #FFD633; /* Alert Yellow */
+    --priority-low:      #A0AEC0; /* Slate */
+  }
+}
+
+/* ─── Reset & Base ───────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--text-light);
+  background-color: var(--bg-workspace);
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background-color: var(--text-light); 
+  color: var(--bg-workspace);
+}
+
+:focus-visible {
+  outline: 3px solid var(--text-light);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Animated Premium Grain Overlay ─────────────────────── */
+@keyframes filmGrain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-0.5%, -0.5%); }
+  20% { transform: translate(0.5%, 0.5%); }
+  30% { transform: translate(-1%, -1%); }
+  40% { transform: translate(1%, 1%); }
+  50% { transform: translate(-0.5%, 0.5%); }
+  60% { transform: translate(0.5%, -0.5%); }
+  70% { transform: translate(-1%, 1%); }
+  80% { transform: translate(1%, -1%); }
+  90% { transform: translate(0.5%, 0.5%); }
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200vw; height: 200vh;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.08; 
+  mix-blend-mode: multiply;
+  animation: filmGrain 4s steps(5) infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  body::after {
+    mix-blend-mode: overlay;
+    opacity: 0.05;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body::after { animation: none; }
+}
+
+@media print {
+  body { background: white; color: black; }
+  body::after { display: none; }
+  .app-shell { display: block; }
+  .sidebar { display: none !important; }
+  .main-content { padding: 0; }
+  .card { box-shadow: none !important; border: 1px solid #ccc; break-inside: avoid; }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.4);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.8); }
+
+.app-shell { display: flex; min-height: 100dvh; }
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6) var(--space-8);
+  padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+  padding-left: calc(var(--space-8) + env(safe-area-inset-left));
+  padding-right: calc(var(--space-8) + env(safe-area-inset-right));
+  background: var(--bg-workspace);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --mobile-btn-display: block;
+  }
+  .app-shell { flex-direction: column; }
+  .main-content { padding: var(--space-4); }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-5);
+  }
+  .dashboard-header .heading-black {
+    font-size: clamp(1.25rem, 6vw, 1.75rem) !important;
+    line-height: 1.1;
+  }
+}
+
+/* ─── Typography Helpers ─────────────────────────────────── */
+.heading-black {
+  font-weight: var(--weight-black);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  /* REMOVED CMYK OFFSET EFFECT FOR CLEAN READABILITY */
+  text-shadow: none;
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light-dim);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) both; }

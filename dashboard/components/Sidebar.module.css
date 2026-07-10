@@ -1,0 +1,240 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  width: var(--sidebar-width);
+  background: color-mix(in srgb, var(--bg-sidebar) 90%, transparent); /* Theme-aware transparency */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-right: 2px solid var(--border-dark);
+  color: var(--text-light);
+  /* OVERSCROLL CONTAINMENT (Feature 12) */
+  overscroll-behavior: contain;
+  z-index: 100;
+}
+
+.header {
+  padding: var(--space-5);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  color: var(--bg-accent);
+  font-size: 1.5rem;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-black);
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-light-dim);
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: var(--space-2);
+}
+
+.checkboxList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0; /* Sharp edges */
+  position: relative;
+}
+
+.checkbox:checked {
+  background: var(--bg-accent);
+  border-color: var(--bg-accent);
+}
+
+.checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--text-light);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.labelText {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.toggle {
+  appearance: none;
+  width: 36px;
+  height: 20px;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--border-light);
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.toggle:checked {
+  background: var(--bg-accent);
+  border-color: var(--bg-accent);
+}
+
+.toggle:checked::after {
+  background: var(--text-light);
+  transform: translateX(16px);
+}
+
+.footer {
+  padding: var(--space-5);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-sidebar);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-accent);
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.userRole {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-light-dim);
+}
+
+.closeBtn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100dvh;
+    z-index: 1000;
+    transition: left 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .mobileOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    animation: fadeInOverlay 0.3s ease;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .closeBtn {
+    display: block;
+  }
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

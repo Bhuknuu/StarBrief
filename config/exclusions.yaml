@@ -1,0 +1,53 @@
+# ══════════════════════════════════════════════════════════
+# StarBrief — Exclusion Rules
+# Items matching these rules are silently discarded before
+# any LLM processing, saving API calls.
+# ══════════════════════════════════════════════════════════
+
+# ─── Companies to always exclude ───
+excluded_companies:
+  - "SSZONE Technologies"
+
+# ─── Keywords that disqualify an opportunity ───
+exclude_keywords:
+  - "sales"
+  - "marketing"
+  - "HR"
+  - "content writing"
+  - "social media manager"
+  - "MBA"
+  - "commerce"
+  - "finance internship"
+  - "graphic design intern"
+  - "video editor intern"
+
+# ─── Regex patterns (case-insensitive) ───
+exclude_patterns:
+  - "(?i)sszone"
+
+# ─── Keywords that MUST appear (at least one) ───
+include_keywords:
+  - "AI"
+  - "ML"
+  - "machine learning"
+  - "deep learning"
+  - "NLP"
+  - "data science"
+  - "neural network"
+  - "computer vision"
+  - "LLM"
+  - "intern"
+  - "hackathon"
+  - "workshop"
+  - "research"
+  - "fellowship"
+  - "python"
+  - "pytorch"
+  - "tensorflow"
+  - "transformers"
+  - "GenAI"
+  - "open source"
+  - "good first issue"
+  - "contribute"
+  - "coding challenge"
+  - "competitive programming"

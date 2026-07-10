@@ -1,0 +1,37 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-none);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-light); /* Always light text on solid backgrounds */
+}
+
+.sm {
+  font-size: var(--text-xs);
+  padding: 2px 6px;
+}
+
+.md {
+  font-size: var(--text-sm);
+  padding: 4px 8px;
+}
+
+.critical {
+  background: var(--priority-critical);
+}
+
+.high {
+  background: var(--priority-high);
+}
+
+.medium {
+  background: var(--priority-medium);
+}
+
+.low {
+  background: var(--priority-low);
+}

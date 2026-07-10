@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-none);
+  box-shadow: 4px 4px 0px var(--border-dark);
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+  color: var(--text-dark);
+}
+
+.axisHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-sidebar); /* Use darker tone for header */
+  border-bottom: 2px solid var(--border-dark);
+}
+
+.axisSpacer {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.axisMarks {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--text-dark);
+}
+
+.mark {
+  /* Using width to center text on the grid lines */
+  width: 25%;
+  text-align: left;
+  padding-left: 4px;
+  border-left: 1px dashed var(--border-subtle);
+}
+
+.buckets {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+}
+
+.bucket {
+  border-bottom: 1px solid var(--border-dark);
+}
+
+.bucket:last-child {
+  border-bottom: none;
+}
+
+.bucketLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--text-light); /* In dark mode it's dark text */
+  background: var(--text-dark);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--border-dark);
+}
+
+/* Container for the grid lines and bars */
+.bucketContent {
+  position: relative;
+}
+
+/* 4-column repeating grid representing the dates above */
+.gridOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 216px; /* 200px spacer + 16px padding gap */
+  right: var(--space-4);
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--border-subtle) 0,
+    var(--border-subtle) 1px,
+    transparent 1px,
+    transparent 25%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bucketItems {
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--space-4);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  text-align: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  color: var(--text-dark-dim);
+  margin-bottom: var(--space-4);
+}
+
+.emptyTitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--text-dark);
+  margin-bottom: var(--space-2);
+}
+
+.emptyDesc {
+  font-size: var(--text-sm);
+  color: var(--text-dark-dim);
+}
+
+@media (max-width: 768px) {
+  .axisSpacer {
+    width: 120px;
+  }
+  .gridOverlay {
+    left: 136px; /* 120px + 16px */
+  }
+}

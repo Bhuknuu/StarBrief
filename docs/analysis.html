@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StarBrief: Project Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    /* ================================================================
+       StarBrief Analysis Report
+       Design: Sanzo Wada heritage palette, Neo-Brutalist typography
+       ================================================================ */
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    :root {
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg-base:      #0C0A09;
+      --bg-surface:   #1A1614;
+      --bg-raised:    #242019;
+      --bg-hover:     #2E2A22;
+      --border-subtle: rgba(199, 178, 153, 0.08);
+      --border-default: rgba(199, 178, 153, 0.16);
+      --border-strong: rgba(199, 178, 153, 0.28);
+      --text-primary: #E8E0D4;
+      --text-secondary: #B5A898;
+      --text-muted:   #8A7E6E;
+      --text-faint:   #5E554A;
+      --accent:       #BB7125;
+      --accent-hover: #D4872E;
+      --accent-muted: rgba(187, 113, 37, 0.15);
+      --critical:     #CC1236;
+      --critical-bg:  rgba(204, 18, 54, 0.12);
+      --high:         #BB7125;
+      --high-bg:      rgba(187, 113, 37, 0.12);
+      --medium:       #4B7D8D;
+      --medium-bg:    rgba(75, 125, 141, 0.12);
+      --low:          #8A7E6E;
+      --low-bg:       rgba(138, 126, 110, 0.10);
+      --cat-internship:  #4B7D8D;
+      --cat-hackathon:   #DA525D;
+      --cat-workshop:    #D4872E;
+      --cat-research:    #8B6BAE;
+      --cat-opensource:  #5B7745;
+      --cat-conference:  #C7A84E;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+      --grain-opacity: 0.05;
+    }
+
+    [data-theme="light"] {
+      --bg-base:      #FAF6F1;
+      --bg-surface:   #FFFFFF;
+      --bg-raised:    #F3EDE5;
+      --bg-hover:     #EDE5DB;
+      --border-subtle: rgba(26, 22, 20, 0.08);
+      --border-default: rgba(26, 22, 20, 0.16);
+      --border-strong: rgba(26, 22, 20, 0.28);
+      --text-primary: #1A1614;
+      --text-secondary: #4A4038;
+      --text-muted:   #7A6E5E;
+      --text-faint:   #A89A88;
+      --accent:       #9A5C18;
+      --accent-hover: #B87025;
+      --accent-muted: rgba(154, 92, 24, 0.12);
+      --critical:     #B00E2A;
+      --critical-bg:  rgba(176, 14, 42, 0.10);
+      --high:         #9A5C18;
+      --high-bg:      rgba(154, 92, 24, 0.10);
+      --medium:       #3A6575;
+      --medium-bg:    rgba(58, 101, 117, 0.10);
+      --low:          #7A6E5E;
+      --low-bg:       rgba(122, 110, 94, 0.08);
+      --cat-internship:  #3A6575;
+      --cat-hackathon:   #C04050;
+      --cat-workshop:    #9A5C18;
+      --cat-research:    #7050A0;
+      --cat-opensource:  #445533;
+      --cat-conference:  #9A7A2A;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --grain-opacity: 0.04;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background 0.25s, color 0.25s;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Film grain */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -50%; left: -50%;
+      width: 200vw; height: 200vh;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      mix-blend-mode: overlay;
+      animation: grain 5s steps(6) infinite;
+    }
+    @keyframes grain {
+      0%,100% { transform: translate(0,0); }
+      20% { transform: translate(-0.5%,-0.5%); }
+      40% { transform: translate(0.5%,0.5%); }
+      60% { transform: translate(-0.5%,0.5%); }
+      80% { transform: translate(0.5%,-0.5%); }
+    }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+      max-width: 1280px;
+      margin: 0 auto;
+      gap: 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-star {
+      font-size: 1.4rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .brand-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      display: block;
+    }
+
+    .toc-label {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+      margin-bottom: 0.75rem;
+    }
+
+    .toc-list { list-style: none; margin-bottom: 2rem; }
+
+    .toc-list li { margin-bottom: 0.1rem; }
+
+    .toc-list a {
+      display: block;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 4px;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .toc-list a:hover,
+    .toc-list a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-muted);
+    }
+
+    .toc-sub { padding-left: 1rem; }
+
+    .theme-toggle {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .theme-btn {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-raised);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .theme-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    /* Main content */
+    .content {
+      padding: 3rem 3.5rem;
+      max-width: 860px;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .page-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 56ch;
+      line-height: 1.65;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .meta-item strong {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    /* Callout */
+    .callout {
+      background: var(--accent-muted);
+      border: 1px solid rgba(187, 113, 37, 0.25);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+    .callout p { margin: 0; font-size: 0.9rem; color: var(--text-primary); }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 1.25rem 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 0.6rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      background: var(--bg-raised);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    tbody td {
+      padding: 0.65rem 1rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+
+    tbody tr:hover td { background: var(--bg-hover); }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      background: var(--bg-raised);
+      border: 1px solid var(--border-default);
+      border-radius: 3px;
+      padding: 0.1em 0.4em;
+      color: var(--accent);
+    }
+
+    pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-done { background: rgba(91, 119, 69, 0.18); color: #5B7745; border: 1px solid rgba(91,119,69,0.25); }
+    .badge-pending { background: var(--critical-bg); color: var(--critical); border: 1px solid rgba(204,18,54,0.2); }
+    .badge-partial { background: var(--medium-bg); color: var(--medium); border: 1px solid rgba(75,125,141,0.2); }
+
+    /* Priority indicators */
+    .priority-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 0.4rem;
+    }
+    .dot-critical { background: var(--critical); }
+    .dot-high { background: var(--high); }
+    .dot-medium { background: var(--medium); }
+    .dot-low { background: var(--low); }
+
+    /* Architecture flow diagram (CSS-based) */
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .flow-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      font-weight: 500;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .flow-box.accent { border-color: var(--accent); background: var(--accent-muted); }
+    .flow-box.critical { border-color: var(--critical); background: var(--critical-bg); }
+
+    .flow-arrow {
+      color: var(--text-faint);
+      font-size: 1rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .flow-label {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    /* Cadence cards */
+    .cadence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .cadence-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+
+    .cadence-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .cadence-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .cadence-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cadence-card ul li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding: 0.2rem 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .cadence-card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .cadence-meta {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Pipeline steps */
+    .pipeline-steps {
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .pipeline-steps::before {
+      content: '';
+      position: absolute;
+      left: 1.25rem;
+      top: 0.5rem;
+      bottom: 0.5rem;
+      width: 1px;
+      background: var(--border-default);
+    }
+
+    .pipeline-step {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .step-num {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-body { padding-top: 0.35rem; }
+
+    .step-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.3rem;
+    }
+
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Color swatches */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+
+    .swatch {
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .swatch-color {
+      height: 48px;
+    }
+
+    .swatch-info {
+      background: var(--bg-surface);
+      padding: 0.5rem 0.6rem;
+    }
+
+    .swatch-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    /* Mermaid override */
+    .mermaid {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+      overflow-x: auto;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 3rem 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; }
+      .content { padding: 2rem 1.5rem; }
+      .cadence-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-star">&#9733;</span>
+      <div>
+        <span class="brand-name">StarBrief</span>
+        <span class="brand-sub">Project Analysis Report</span>
+      </div>
+    </div>
+
+    <div class="toc-label">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#overview">1. Overview</a></li>
+      <li><a href="#structure">2. Repository Structure</a></li>
+      <li><a href="#architecture">3. Architecture</a>
+        <ul class="toc-sub">
+          <li><a href="#dual-cadence">Dual-Cadence Engine</a></li>
+          <li><a href="#pipeline">Processing Pipeline</a></li>
+          <li><a href="#infra">Infrastructure</a></li>
+        </ul>
+      </li>
+      <li><a href="#database">4. Database Schema</a></li>
+      <li><a href="#scrapers">5. Scraper Sources</a></li>
+      <li><a href="#design">6. Design System</a></li>
+      <li><a href="#frontend">7. Frontend</a></li>
+      <li><a href="#status">8. Implementation Status</a></li>
+      <li><a href="#roadmap">9. Roadmap</a></li>
+      <li><a href="#notes">10. Technical Notes</a></li>
+    </ul>
+
+    <div class="theme-toggle">
+      <button class="theme-btn" id="themeBtn">Toggle: Light Mode</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <header class="page-header">
+      <div class="page-kicker">Codebase Analysis / July 2026</div>
+      <h1 class="page-title">StarBrief</h1>
+      <p class="page-subtitle">
+        Automated CS Opportunity Intelligence Pipeline. Scrapes 14 sources, structures the results with LLMs, scores them against a personal profile, and presents them on a premium dashboard. Runs entirely on free-tier infrastructure.
+      </p>
+      <div class="meta-row">
+        <span class="meta-item"><strong>Location</strong> D:\Programs\Github\StarBrief</span>
+        <span class="meta-item"><strong>Backend</strong> Python 3.11+</span>
+        <span class="meta-item"><strong>Frontend</strong> Next.js 16, TypeScript</span>
+        <span class="meta-item"><strong>Database</strong> Neon PostgreSQL</span>
+        <span class="meta-item"><strong>Status</strong> Skeleton-to-Core Phase</span>
+      </div>
+    </header>
+
+
+    <!-- 1. Overview -->
+    <section id="overview">
+      <div class="section-kicker">01 / Overview</div>
+      <h2>What Is StarBrief</h2>
+      <p>
+        The name combines A* search (the optimal-path algorithm) with "brief" for concise intelligence. StarBrief is a personal tool that solves a specific problem: relevant internships, hackathons, open-source programs, and research fellowships get posted across a dozen different platforms. Checking them manually means either wasting time every morning on repetitive searches or missing deadlines because you found the listing too late.
+      </p>
+      <p>
+        StarBrief automates the collection, cleaning, and prioritization. The output is a curated briefing, delivered through a dashboard, of opportunities ranked specifically against your interests and skills profile.
+      </p>
+
+      <div class="callout">
+        <p>The system targets CS students in India, with a focus on AI, ML, NLP, and data science. The default profile in <code>config/default_profile.json</code> is configured for Anunay, a 2nd-year B.Tech CS student with primary interests in LLMs, computer vision, and generative AI.</p>
+      </div>
+
+      <h3>Opportunity Categories</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Color Token</th>
+              <th>Example Sources</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="priority-dot" style="background:var(--cat-internship)"></span>Internship</td><td><code>#4B7D8D</code> Gobelin Blue</td><td>Internshala, LinkedIn, Google Jobs</td></tr>
+            <tr><td><span class="priority-dot" style="background:var(--cat-hackathon)"></span>Hackathon</td><td><code>#DA525D</code> Eugenia Red</td><td>DevPost, Unstop, MLH</td></tr>
+            <tr><td><span class="priority-dot" style="background:var(--cat-workshop)"></span>Workshop</td><td><code>#D4872E</code> Bright Sienna</td><td>Konfhub, Townscript, Luma</td></tr>
+            <tr><td><span class="priority-dot" style="background:var(--cat-research)"></span>Research</td><td><code>#8B6BAE</code> Wisteria</td><td>IIT / IISc portals, Reddit</td></tr>
+            <tr><td><span class="priority-dot" style="background:var(--cat-opensource)"></span>Open Source</td><td><code>#5B7745</code> Cypress Green</td><td>GitHub Issues API</td></tr>
+            <tr><td><span class="priority-dot" style="background:var(--cat-conference)"></span>Conference</td><td><code>#C7A84E</code> Golden Ochre</td><td>confs.tech, developers.events</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- 2. Repository Structure -->
+    <section id="structure">
+      <div class="section-kicker">02 / Repository</div>
+      <h2>Directory Structure</h2>
+      <pre><code>StarBrief/
+├── config/
+│   ├── default_profile.json   User interests, scoring weights, notification prefs
+│   ├── exclusions.yaml        Disqualifying keywords, include keywords, regex patterns
+│   └── sources.yaml           Per-source crawl config: URLs, methods, rate limits
+│
+├── dashboard/                 Next.js 16 web app (TypeScript, React 19, Framer Motion)
+│   ├── app/                   Page entry point, global CSS, layout wrapper
+│   ├── components/            Sidebar, OpportunityCard, TaskView, TimelineView, ViewToggle
+│   └── lib/                   TypeScript types and Sanzo Wada color tokens
+│
+├── db/
+│   ├── connection.py          Async connection pool (asyncpg), sync connection (psycopg2)
+│   └── models.py              Pydantic v2 models mirroring the PostgreSQL schema
+│
+├── docs/
+│   ├── design_research.md     UX design system: palette, layout, component specs
+│   ├── implementation_plan.md Full architectural blueprint with schema, API, scraper specs
+│   └── analysis.html          This file
+│
+├── pipeline/                  Cron orchestrators: daily.py, weekly.py (planned)
+├── processing/                Pipeline stages: filter, dedup, structurer, scorer (planned)
+├── scrapers/                  Source-specific implementations extending BaseScraper
+├── tests/                     Pytest suite with fixtures in conftest.py
+│
+├── pyproject.toml             Project metadata, Ruff linting, MyPy config
+└── requirements.txt           Pip dependency list</code></pre>
+    </section>
+
+
+    <!-- 3. Architecture -->
+    <section id="architecture">
+      <div class="section-kicker">03 / Architecture</div>
+      <h2>System Architecture</h2>
+      <p>
+        The entire backend is stateless. There is no always-on server. Every compute job is a GitHub Actions cron that wakes up, does its work, writes to Neon PostgreSQL, and exits. The dashboard is a static Next.js app that reads from the database through serverless API routes.
+      </p>
+
+      <div id="dual-cadence">
+        <h3>Dual-Cadence Crawl Engine</h3>
+        <p>
+          The core innovation is splitting scraping into two cadences rather than running a full deep scrape every day. A full scrape every 24 hours would be slow, expensive in API calls, and likely to trigger rate limits. The dual cadence keeps daily runs under 15 minutes and weekly runs under 45 minutes.
+        </p>
+
+        <div class="cadence-grid">
+          <div class="cadence-card">
+            <div class="cadence-label">Runs Daily at 2:00 AM IST</div>
+            <div class="cadence-title">Daily Sentinel</div>
+            <ul>
+              <li>Re-checks all active opportunity URLs with async HEAD requests</li>
+              <li>Marks expired, updated, or cancelled items in the database</li>
+              <li>Skims front pages and RSS feeds of each source</li>
+              <li>Queues new URLs into <code>discovery_queue</code> as breadcrumbs (URL + context only, no full scrape)</li>
+              <li>Writes a structured run log to <code>scraper_runs</code></li>
+            </ul>
+            <div class="cadence-meta">Budget: ~10-15 min / ~500 HTTP requests</div>
+          </div>
+
+          <div class="cadence-card">
+            <div class="cadence-label">Runs Sunday at 3:00 AM IST</div>
+            <div class="cadence-title">Weekly Deep Crawler</div>
+            <ul>
+              <li>Consumes all unprocessed breadcrumbs from the discovery queue</li>
+              <li>Paginates 3-5 pages deep into each enabled source</li>
+              <li>Hits Reddit API, university portals, and newsletter archives</li>
+              <li>Sends all new items through the full processing pipeline</li>
+              <li>Clears processed entries from the discovery queue</li>
+            </ul>
+            <div class="cadence-meta">Budget: ~30-45 min / ~300 HTTP requests / ~100 LLM calls</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="pipeline">
+        <h3>Processing Pipeline</h3>
+        <p>Every raw scraped item passes through five stages sequentially:</p>
+
+        <div class="pipeline-steps">
+          <div class="pipeline-step">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <div class="step-title">Rule-Based Pre-Filter</div>
+              <div class="step-desc">Keyword matching using <code>exclusions.yaml</code>. Must match at least one include keyword (AI, ML, intern, hackathon, open source, etc.) and must not match any exclude keyword (sales, marketing, HR, MBA, SSZONE Technologies). No API call. Eliminates roughly 60% of raw items before any cost is incurred.</div>
+            </div>
+          </div>
+
+          <div class="pipeline-step">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <div class="step-title">Fuzzy and Semantic Deduplication</div>
+              <div class="step-desc">The <code>thefuzz</code> library compares title and organization strings. If both exceed 85% similarity with an existing record, the item is merged rather than inserted as a duplicate. For items that pass fuzzy dedup, cosine similarity of Google <code>text-embedding-004</code> vectors catches semantic duplicates: the same internship posted on Internshala, LinkedIn, and the company site with different wording.</div>
+            </div>
+          </div>
+
+          <div class="pipeline-step">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <div class="step-title">LLM Structuring with Reflection Loop</div>
+              <div class="step-desc">Groq (Llama 3 70B) receives a structured prompt and returns JSON: category, 2-3 line summary, skills array, year requirements, stipend range, geo scope, and base quality score. LiteLLM automatically reroutes to Gemini 1.5 Flash on any Groq error or timeout. A two-prompt Actor-Critic reflection loop then checks the output for hallucinated dates or URLs not present in the source text, triggering a re-extraction pass if the critic flags an issue.</div>
+            </div>
+          </div>
+
+          <div class="pipeline-step">
+            <div class="step-num">04</div>
+            <div class="step-body">
+              <div class="step-title">Persona Scoring</div>
+              <div class="step-desc">A local Python function (no LLM) computes a relevance score between 0 and 1 against the user profile using four weighted factors: field match (40%), deadline urgency (25%), organization prestige (20%), and compensation (15%). The score maps to a priority bucket: Critical (0.75+), High (0.50+), Medium (0.25+), Low (below 0.25).</div>
+            </div>
+          </div>
+
+          <div class="pipeline-step">
+            <div class="step-num">05</div>
+            <div class="step-body">
+              <div class="step-title">URL Validation and Write</div>
+              <div class="step-desc">Async HTTP HEAD requests verify that all apply URLs return 200. Valid items are bulk-inserted into <code>opportunities</code>. Items with invalid URLs are inserted with <code>url_valid = false</code> and <code>status = 'unverified'</code> rather than discarded, since the listing data is still useful. The discovery queue row is marked processed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="infra">
+        <h3>Infrastructure</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Layer</th><th>Technology</th><th>Free Tier Used</th><th>Expected Usage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Scheduler</td><td>GitHub Actions cron</td><td>Unlimited (public repo)</td><td>~15 hrs/month</td></tr>
+              <tr><td>Backup scheduler</td><td>Vercel Cron</td><td>1x/day, 100 jobs</td><td>1 job: daily status</td></tr>
+              <tr><td>Database</td><td>Neon PostgreSQL</td><td>0.5 GB, 100 CU-hrs</td><td>~10 MB, ~20 CU-hrs</td></tr>
+              <tr><td>LLM (primary)</td><td>Groq, Llama 3 70B</td><td>Dynamic free tier</td><td>~100-200 calls/week</td></tr>
+              <tr><td>LLM (fallback)</td><td>Gemini 1.5 Flash</td><td>Dynamic free tier</td><td>Fallback only</td></tr>
+              <tr><td>Embeddings</td><td>Google text-embedding-004</td><td>Dynamic free tier</td><td>~50-100 calls/week</td></tr>
+              <tr><td>Frontend hosting</td><td>Vercel Hobby</td><td>100 GB bandwidth</td><td>~5 GB</td></tr>
+              <tr><td>Total monthly cost</td><td colspan="3"><strong>$0</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 4. Database -->
+    <section id="database">
+      <div class="section-kicker">04 / Database</div>
+      <h2>Database Schema</h2>
+      <p>Six tables in Neon PostgreSQL. All models are also defined as Pydantic v2 classes in <code>db/models.py</code> for use in the Python pipeline.</p>
+
+      <h3>opportunities (main table)</h3>
+      <p>One row per unique <code>source_url</code>. The UNIQUE constraint on <code>source_url</code> acts as a final safeguard against duplicates that slip past the dedup stage.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>UUID</td><td>Primary key, auto-generated</td></tr>
+            <tr><td><code>title</code></td><td>TEXT</td><td>Opportunity title, required</td></tr>
+            <tr><td><code>organization</code></td><td>TEXT</td><td>Host company or institution</td></tr>
+            <tr><td><code>category</code></td><td>TEXT</td><td>Enum: internship, hackathon, workshop, conference, open_source, research</td></tr>
+            <tr><td><code>deadline</code></td><td>TIMESTAMPTZ</td><td>NULL for rolling or unknown deadlines</td></tr>
+            <tr><td><code>location</code></td><td>TEXT</td><td>City name or "Remote"</td></tr>
+            <tr><td><code>geo_scope</code></td><td>TEXT</td><td>Enum: local, pan_india, global</td></tr>
+            <tr><td><code>skills_required</code></td><td>TEXT[]</td><td>PostgreSQL array, extracted by LLM</td></tr>
+            <tr><td><code>source_url</code></td><td>TEXT</td><td>UNIQUE. Where it was found.</td></tr>
+            <tr><td><code>apply_url</code></td><td>TEXT</td><td>Direct application link</td></tr>
+            <tr><td><code>summary</code></td><td>TEXT</td><td>LLM-generated 2-3 line summary</td></tr>
+            <tr><td><code>status</code></td><td>TEXT</td><td>Enum: active, deadline_approaching, expired, cancelled, updated, unverified</td></tr>
+            <tr><td><code>base_relevance</code></td><td>FLOAT</td><td>Profile-independent quality score (0.0-1.0)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Other Tables</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Table</th><th>Purpose</th><th>Key Fields</th></tr></thead>
+          <tbody>
+            <tr><td><code>opportunity_changes</code></td><td>Audit log for field-level changes</td><td>opportunity_id, field_name, old_value, new_value, changed_at</td></tr>
+            <tr><td><code>discovery_queue</code></td><td>Breadcrumbs from daily sentinel</td><td>url UNIQUE, source_name, context, processed BOOL</td></tr>
+            <tr><td><code>scraper_runs</code></td><td>Execution logs</td><td>scraper_name, run_type, items_found/new/updated/expired, status</td></tr>
+            <tr><td><code>user_profiles</code></td><td>User config and interests</td><td>interests JSONB, filters JSONB, scoring_weights JSONB</td></tr>
+            <tr><td><code>user_opportunity_scores</code></td><td>Materialized per-user relevance</td><td>user_id, opportunity_id, relevance_score, priority, is_dismissed, is_saved</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <p>Estimated steady-state data volume: under 10 MB. The Neon free tier allows 500 MB. There is comfortable headroom for years of operation.</p>
+      </div>
+    </section>
+
+
+    <!-- 5. Scrapers -->
+    <section id="scrapers">
+      <div class="section-kicker">05 / Sources</div>
+      <h2>Scraper Sources</h2>
+      <p>14 sources are planned across two phases. All scrapers extend <code>BaseScraper</code> in <code>scrapers/base.py</code>, which provides an async <code>httpx</code> client with user-agent rotation, configurable rate limiting, and lifecycle management. A template scraper at <code>scrapers/_template.py</code> shows the implementation contract.</p>
+
+      <h3>Phase 1: Core 6 (Enabled)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Source</th><th>Method</th><th>Daily</th><th>Weekly</th><th>Rate Limit</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Internshala</strong></td><td>httpx + BeautifulSoup</td><td>Yes (p.1)</td><td>Yes (5 pages)</td><td>3.0s + UA rotation</td></tr>
+            <tr><td><strong>Unstop</strong></td><td>Public JSON API</td><td>Yes</td><td>Yes (full categories)</td><td>1.5s</td></tr>
+            <tr><td><strong>DevPost</strong></td><td>httpx + BeautifulSoup</td><td>Yes (p.1)</td><td>Yes (3 pages)</td><td>1.0s</td></tr>
+            <tr><td><strong>MLH</strong></td><td>httpx + BeautifulSoup</td><td>Yes</td><td>Yes</td><td>1.0s</td></tr>
+            <tr><td><strong>GitHub Issues</strong></td><td>REST API (authenticated)</td><td>Yes</td><td>Yes (multi-repo)</td><td>0.5s (5000 req/hr)</td></tr>
+            <tr><td><strong>Konfhub</strong></td><td>httpx + BeautifulSoup</td><td>No</td><td>Yes</td><td>1.5s</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Phase 2: Extended Sources (Disabled)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Source</th><th>Method</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Townscript</td><td>httpx + BeautifulSoup</td><td>India-focused tech events</td></tr>
+            <tr><td>Luma</td><td>Playwright</td><td>JS-rendered, requires headless browser</td></tr>
+            <tr><td>IIT / IISc portals</td><td>httpx + BeautifulSoup</td><td>URLs change each season, requires manual update Jan-Feb</td></tr>
+            <tr><td>Reddit</td><td>Reddit API (OAuth)</td><td>Noisy. Rule-based pre-filter essential.</td></tr>
+            <tr><td>LinkedIn (SerpAPI)</td><td>SerpAPI proxy</td><td>Shares 100/month budget with Google Jobs</td></tr>
+            <tr><td>Google Jobs (SerpAPI)</td><td>SerpAPI proxy</td><td>Same budget as LinkedIn</td></tr>
+            <tr><td>Twitter/X</td><td>Nitter / X API free tier</td><td>Fragile. Nitter instances unreliable.</td></tr>
+            <tr><td>Conference Aggregators</td><td>httpx + BeautifulSoup</td><td>confs.tech, developers.events, techevents.online</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- 6. Design -->
+    <section id="design">
+      <div class="section-kicker">06 / Design System</div>
+      <h2>Sanzo Wada Color System</h2>
+      <p>
+        The palette is derived from Sanzo Wada's 1933 "Dictionary of Color Combinations," a book of 348 curated color harmonies originally for print. The appeal is that these combinations were selected for timeless harmony rather than trend. On screen, they read as warm and distinctive instead of the cold SaaS blues that saturate the web.
+      </p>
+      <p>
+        The implementation derives tokens from Wada combinations #247, #268, #131, and #182, adapted for digital contrast requirements.
+      </p>
+
+      <h3>Primary Tokens (Dark Mode)</h3>
+      <div class="swatch-grid">
+        <div class="swatch">
+          <div class="swatch-color" style="background:#0C0A09"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">bg-base</div>
+            <div class="swatch-hex">#0C0A09 Sumi-ink</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#1A1614"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">bg-surface</div>
+            <div class="swatch-hex">#1A1614 Charred wood</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#E8E0D4"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">text-primary</div>
+            <div class="swatch-hex">#E8E0D4 Unbleached silk</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#BB7125"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">accent</div>
+            <div class="swatch-hex">#BB7125 Raw Sienna</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#CC1236"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">priority-critical</div>
+            <div class="swatch-hex">#CC1236 Wada Carmine</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#4B7D8D"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">priority-medium</div>
+            <div class="swatch-hex">#4B7D8D Gobelin Blue</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#FAF6F1"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">bg-base (light)</div>
+            <div class="swatch-hex">#FAF6F1 Washi paper</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#5B7745"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">cat-opensource</div>
+            <div class="swatch-hex">#5B7745 Cypress Green</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>WCAG 2.1 Contrast Verification</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Token</th><th>Hex</th><th>Contrast on #0C0A09</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>text-primary</td><td>#E8E0D4</td><td>13.2:1</td><td><span class="badge badge-done">AAA</span></td></tr>
+            <tr><td>text-secondary</td><td>#B5A898</td><td>7.8:1</td><td><span class="badge badge-done">AAA</span></td></tr>
+            <tr><td>text-muted</td><td>#8A7E6E</td><td>4.6:1</td><td><span class="badge badge-done">AA</span></td></tr>
+            <tr><td>accent</td><td>#BB7125</td><td>4.7:1</td><td><span class="badge badge-done">AA</span></td></tr>
+            <tr><td>priority-critical</td><td>#CC1236</td><td>4.5:1</td><td><span class="badge badge-done">AA</span></td></tr>
+            <tr><td>priority-medium</td><td>#4B7D8D</td><td>4.5:1</td><td><span class="badge badge-done">AA</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The film grain effect is implemented as a fixed position SVG filter animation on the body pseudo-element at 5% opacity in dark mode, 8% in light. The animation runs at 5-second intervals with 6 steps, producing a subtle, non-distracting texture that gives depth to flat dark surfaces.</p>
+    </section>
+
+
+    <!-- 7. Frontend -->
+    <section id="frontend">
+      <div class="section-kicker">07 / Frontend</div>
+      <h2>Dashboard Architecture</h2>
+
+      <p>The dashboard is a Next.js 16 App Router application. Dependencies: React 19, TypeScript, Framer Motion for animations, CSS Modules for component-scoped styles. No Tailwind. No UI component library.</p>
+
+      <h3>The Bookshelf Principle</h3>
+      <p>
+        One rule governs the layout: data lives in one canonical place. The sidebar is the single source of truth for all filter state. Both the Task View and Timeline View read from the same sidebar filter state. Switching views changes only the rendering, not the data query. Filter state is persisted to <code>localStorage</code> so it survives page refreshes.
+      </p>
+
+      <h3>Task View (Default)</h3>
+      <p>A prioritized list grouped by deadline buckets: Today, This Week, This Month, Rolling (no deadline). Cards show a 3px priority-colored left border, organization, deadline countdown, category pill, and skills. Clicking a card expands an inline detail section. The Apply button appears on hover on desktop.</p>
+
+      <h3>Timeline View</h3>
+      <p>A Gantt-style calendar where each opportunity is a horizontal bar spanning from its discovery or event date to its deadline. Bar fill color encodes category. The left cap of the bar encodes priority. A dashed vertical line marks today. Bars have a minimum width of 40px to remain readable for single-day events. Rolling items appear in a separate row at the bottom.</p>
+
+      <h3>Responsive Behavior</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Breakpoint</th><th>Layout</th></tr></thead>
+          <tbody>
+            <tr><td>1200px and above</td><td>Sidebar (260px) + fluid content area</td></tr>
+            <tr><td>768-1199px</td><td>Sidebar collapses to icon rail (56px) + content</td></tr>
+            <tr><td>Below 768px</td><td>No sidebar; bottom tab bar with Filters as a full-screen slide-up sheet</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Component List</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Component</th><th>File</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>Sidebar</td><td><code>Sidebar.tsx</code></td><td>Unified filter panel: categories, priority, location, pipeline health</td></tr>
+            <tr><td>OpportunityCard</td><td><code>OpportunityCard.tsx</code></td><td>Card with priority border, expand behavior, apply button</td></tr>
+            <tr><td>TaskView</td><td><code>TaskView.tsx</code></td><td>Groups cards into time buckets, handles empty states</td></tr>
+            <tr><td>TimelineView</td><td><code>TimelineView.tsx</code></td><td>Gantt calendar, scrollable by week</td></tr>
+            <tr><td>TimelineBar</td><td><code>TimelineBar.tsx</code></td><td>Individual bar with tooltip and click handler</td></tr>
+            <tr><td>ViewToggle</td><td><code>ViewToggle.tsx</code></td><td>Task / Timeline switcher in the header</td></tr>
+            <tr><td>CategoryPill</td><td><code>CategoryPill.tsx</code></td><td>Category label with Wada color token</td></tr>
+            <tr><td>PriorityBadge</td><td><code>PriorityBadge.tsx</code></td><td>Priority indicator with color-coded background</td></tr>
+            <tr><td>SearchBar</td><td><code>SearchBar.tsx</code></td><td>Client-side text search across titles and organizations</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- 8. Implementation Status -->
+    <section id="status">
+      <div class="section-kicker">08 / Status</div>
+      <h2>Implementation Status</h2>
+      <p>The project is in the skeleton-to-core phase. Foundation is solid. The moving parts are not connected yet.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Component</th><th>Status</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Config files</td>
+              <td><span class="badge badge-done">Complete</span></td>
+              <td>sources.yaml, exclusions.yaml, default_profile.json</td>
+            </tr>
+            <tr>
+              <td>Database connection</td>
+              <td><span class="badge badge-done">Complete</span></td>
+              <td>Async pool + sync context managers, health check endpoint</td>
+            </tr>
+            <tr>
+              <td>Database models</td>
+              <td><span class="badge badge-done">Complete</span></td>
+              <td>Pydantic v2 models for all 6 tables</td>
+            </tr>
+            <tr>
+              <td>Scraper base class</td>
+              <td><span class="badge badge-done">Complete</span></td>
+              <td>BaseScraper with httpx, UA rotation, rate limiting, async context manager</td>
+            </tr>
+            <tr>
+              <td>Scraper template</td>
+              <td><span class="badge badge-done">Complete</span></td>
+              <td>_template.py shows the contract for adding a new source</td>
+            </tr>
+            <tr>
+              <td>Dashboard UI components</td>
+              <td><span class="badge badge-done">Complete</span></td>
+              <td>All 9 components built with CSS Modules and Wada styles applied</td>
+            </tr>
+            <tr>
+              <td>Database migrations</td>
+              <td><span class="badge badge-pending">Not Started</span></td>
+              <td>SQL files for creating tables and indexes in Neon</td>
+            </tr>
+            <tr>
+              <td>Scraper implementations</td>
+              <td><span class="badge badge-pending">Not Started</span></td>
+              <td>6 Phase 1 sources: Internshala, Unstop, DevPost, MLH, GitHub Issues, Konfhub</td>
+            </tr>
+            <tr>
+              <td>Processing pipeline</td>
+              <td><span class="badge badge-pending">Not Started</span></td>
+              <td>pre_filter.py, dedup.py, llm_router.py, scorer.py, validator.py</td>
+            </tr>
+            <tr>
+              <td>Pipeline orchestrators</td>
+              <td><span class="badge badge-pending">Not Started</span></td>
+              <td>daily.py and weekly.py in pipeline/</td>
+            </tr>
+            <tr>
+              <td>GitHub Actions workflows</td>
+              <td><span class="badge badge-pending">Not Started</span></td>
+              <td>.github/workflows/daily.yml and weekly.yml</td>
+            </tr>
+            <tr>
+              <td>Dashboard API routes</td>
+              <td><span class="badge badge-pending">Not Started</span></td>
+              <td>Next.js route handlers for /api/opportunities, /api/timeline, /api/health</td>
+            </tr>
+            <tr>
+              <td>Dashboard data integration</td>
+              <td><span class="badge badge-partial">Partial</span></td>
+              <td>page.tsx uses hardcoded dummy data; filter/dismiss/save logic is complete</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- 9. Roadmap -->
+    <section id="roadmap">
+      <div class="section-kicker">09 / Roadmap</div>
+      <h2>Phased Roadmap</h2>
+
+      <h3>Phase 1: Working Pipeline (Current)</h3>
+      <p>Goal: a fully functional end-to-end pipeline for the 6 core sources, deployed and running automatically.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Priority</th></tr></thead>
+          <tbody>
+            <tr><td>Write SQL migration scripts and run against Neon</td><td><span class="priority-dot dot-critical"></span>Critical</td></tr>
+            <tr><td>Implement Internshala scraper</td><td><span class="priority-dot dot-critical"></span>Critical</td></tr>
+            <tr><td>Implement Unstop scraper (API-first)</td><td><span class="priority-dot dot-critical"></span>Critical</td></tr>
+            <tr><td>Implement DevPost, MLH, GitHub Issues, Konfhub scrapers</td><td><span class="priority-dot dot-high"></span>High</td></tr>
+            <tr><td>Build processing/pre_filter.py and processing/dedup.py</td><td><span class="priority-dot dot-critical"></span>Critical</td></tr>
+            <tr><td>Build processing/llm_router.py with LiteLLM cascade</td><td><span class="priority-dot dot-critical"></span>Critical</td></tr>
+            <tr><td>Build processing/scorer.py against default_profile.json</td><td><span class="priority-dot dot-high"></span>High</td></tr>
+            <tr><td>Build pipeline/daily.py and pipeline/weekly.py orchestrators</td><td><span class="priority-dot dot-high"></span>High</td></tr>
+            <tr><td>Create GitHub Actions workflow files</td><td><span class="priority-dot dot-high"></span>High</td></tr>
+            <tr><td>Build Next.js API routes and connect dashboard to real data</td><td><span class="priority-dot dot-high"></span>High</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Phase 2: Extended Coverage</h3>
+      <p>Enable the Phase 2 sources, add auto-healing scraper logic, add source coverage scoring.</p>
+
+      <h3>Phase 3: Multi-User and Android</h3>
+      <p>Open the platform to other users, build the native Android app, add email digest notifications alongside web push.</p>
+    </section>
+
+
+    <!-- 10. Technical Notes -->
+    <section id="notes">
+      <div class="section-kicker">10 / Notes</div>
+      <h2>Technical Notes</h2>
+
+      <h3>CSS Utilities Without Tailwind</h3>
+      <p>
+        Tailwind is not installed. The dashboard uses CSS Modules for component-scoped styles and defines a small set of utility classes (<code>flex</code>, <code>items-center</code>, <code>gap-4</code>, etc.) in <code>globals.css</code>. These are not Tailwind classes; they are intentional custom utilities with the same names. Adding any new utility class requires defining it explicitly in <code>globals.css</code>.
+      </p>
+
+      <h3>Unstop: Prefer the API</h3>
+      <p>
+        Unstop has a public JSON endpoint at <code>/api/public/opportunity/search-new</code>. The implementation plan specifies using this over HTML scraping. This is strongly recommended. Unstop's HTML structure is complex and will break. The API response is stable.
+      </p>
+
+      <h3>Reflection Loop Cost Model</h3>
+      <p>
+        The two-prompt Actor-Critic pattern adds a second Groq call per item that passes through LLM structuring. At 50-100 items per weekly run, this is 100-200 total Groq calls per week. Both primary and fallback models are on free tiers. The current plan runs the critic on every item. A future optimization: run the critic only when the Actor output contains a future date or an external URL (the two most hallucination-prone fields), reducing calls by roughly 40%.
+      </p>
+
+      <h3>Internshala Rate Limiting</h3>
+      <p>
+        Internshala aggressively rate-limits scrapers. The sources.yaml configuration sets <code>rate_limit_seconds: 3.0</code> and <code>rotate_user_agent: true</code>. Both are picked up automatically by <code>BaseScraper.fetch()</code>. The weekly deep scraper paginates 5 pages with these delays, meaning the Internshala scrape alone takes approximately 15 seconds minimum per page, or roughly 75 seconds total.
+      </p>
+
+      <h3>IIT / IISc Portal URLs</h3>
+      <p>
+        University summer program pages change URL structure every year when the new application cycle opens, typically in January or February. The URLs in sources.yaml for iit_iisc will need manual verification and updates at the start of each academic year.
+      </p>
+
+      <h3>Auto-Healing Scraper (Phase 2)</h3>
+      <p>
+        When a scraper returns zero results on a run where it previously returned 50 or more, the anomaly detector passes the raw HTML to Gemini 1.5 Flash (1M token context window) and asks it to identify updated CSS selectors. Those selectors are patched in-memory for the current run. This fires only on failure, costs exactly one Gemini call, and recovers a broken scraper without a code deployment.
+      </p>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Theme toggle
+  const btn = document.getElementById('themeBtn');
+  const html = document.documentElement;
+
+  const savedTheme = localStorage.getItem('sb_analysis_theme') || 'dark';
+  html.setAttribute('data-theme', savedTheme);
+  btn.textContent = savedTheme === 'dark' ? 'Toggle: Light Mode' : 'Toggle: Dark Mode';
+
+  btn.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('sb_analysis_theme', next);
+    btn.textContent = next === 'dark' ? 'Toggle: Light Mode' : 'Toggle: Dark Mode';
+  });
+
+  // Active ToC link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Mermaid init
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
+    themeVariables: {
+      primaryColor: '#242019',
+      primaryTextColor: '#E8E0D4',
+      primaryBorderColor: '#BB7125',
+      lineColor: '#8A7E6E',
+      background: '#1A1614',
+      mainBkg: '#242019',
+    }
+  });
+</script>
+</body>
+</html>

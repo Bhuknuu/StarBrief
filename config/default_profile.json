@@ -1,0 +1,45 @@
+{
+    "profile": {
+        "name": "Anunay",
+        "year_of_study": 2,
+        "graduation_year": 2028,
+        "degree": "B.Tech CS"
+    },
+    "interests": {
+        "primary": [
+            "AI", "ML", "NLP", "LLM", "Deep Learning",
+            "Data Science", "ANN", "CNN", "Computer Vision",
+            "Generative AI", "Reinforcement Learning",
+            "Natural Language Processing", "Transformers"
+        ],
+        "secondary": [
+            "Hackathons", "Open Source", "Research",
+            "Competitive Programming"
+        ],
+        "negative": [
+            "Full Stack", "Frontend Development",
+            "WordPress", "Marketing", "Sales", "HR"
+        ]
+    },
+    "filters": {
+        "locations": [],
+        "paid_only": false,
+        "female_exclusive": false,
+        "min_stipend": null,
+        "excluded_companies": ["SSZONE Technologies"],
+        "target_companies": []
+    },
+    "notification_prefs": {
+        "channels": ["web_push"],
+        "frequency": "daily_digest",
+        "digest_time": "08:00",
+        "quiet_hours": { "start": "22:00", "end": "07:00" },
+        "min_priority": "medium"
+    },
+    "scoring_weights": {
+        "field_match": 0.40,
+        "deadline_urgency": 0.25,
+        "organization_prestige": 0.20,
+        "compensation": 0.15
+    }
+}
