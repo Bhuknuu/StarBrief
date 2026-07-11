@@ -7,9 +7,10 @@
 name: " Weekly Deep Crawler"
 
 on:
-  schedule:
-    - cron: "30 21 * * 0"          # 3:00 AM IST Sunday = 9:30 PM UTC Saturday
-  workflow_dispatch:                 # manual trigger for testing
+  # schedule:
+  #   - cron: "30 21 * * 0"        # 3:00 AM IST Sunday = 9:30 PM UTC Saturday
+  #   Uncomment schedule above to enable automatic weekly runs.
+  workflow_dispatch:                 # run manually from the Actions tab
 
 permissions:
   contents: read
