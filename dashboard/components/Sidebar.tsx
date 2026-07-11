@@ -115,10 +115,10 @@ export function Sidebar({ filters, onFilterChange, isOpen, onClose }: SidebarPro
 
       <div className={styles.footer}>
         <div className={styles.profile}>
-          <div className={styles.avatar}>A</div>
+          <div className={styles.avatar}>U</div>
           <div className={styles.userInfo}>
-            <span className={styles.userName}>Anunay</span>
-            <span className={styles.userRole}>B.Tech CS &apos;28</span>
+            <span className={styles.userName}>User</span>
+            <span className={styles.userRole}>Student</span>
           </div>
         </div>
       </div>

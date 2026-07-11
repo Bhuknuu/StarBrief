@@ -1,10 +1,10 @@
 # ══════════════════════════════════════════════════════════
-# StarBrief — Weekly Deep Crawler Workflow
+# StarBrief  -  Weekly Deep Crawler Workflow
 # Runs every Sunday at 3:00 AM IST (9:30 PM UTC Saturday)
 # Full scrape + discovery queue processing + Gemini classification
 # ══════════════════════════════════════════════════════════
 
-name: "⭐ Weekly Deep Crawler"
+name: " Weekly Deep Crawler"
 
 on:
   schedule:

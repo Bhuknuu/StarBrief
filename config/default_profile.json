@@ -1,10 +1,4 @@
 {
-    "profile": {
-        "name": "Anunay",
-        "year_of_study": 2,
-        "graduation_year": 2028,
-        "degree": "B.Tech CS"
-    },
     "interests": {
         "primary": [
             "AI", "ML", "NLP", "LLM", "Deep Learning",

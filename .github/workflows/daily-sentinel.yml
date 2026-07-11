@@ -1,10 +1,10 @@
 # ══════════════════════════════════════════════════════════
-# StarBrief — Daily Sentinel Workflow
+# StarBrief  -  Daily Sentinel Workflow
 # Runs every day at 2:00 AM IST (8:30 PM UTC previous day)
 # Checks known URLs for status changes + collects breadcrumbs
 # ══════════════════════════════════════════════════════════
 
-name: "⭐ Daily Sentinel"
+name: " Daily Sentinel"
 
 on:
   schedule:

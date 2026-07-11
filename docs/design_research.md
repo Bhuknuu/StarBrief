@@ -1,8 +1,8 @@
-# StarBrief — UX Design System v2
+# StarBrief  -  UX Design System v2
 
-> **Color Source**: Sanzo Wada — *A Dictionary of Color Combinations* (1933)
+> **Color Source**: Sanzo Wada  -  *A Dictionary of Color Combinations* (1933)
 > **Layout**: Dual-view (Task + Timeline), unified sidebar filters
-> **Principle**: Bookshelf, not side-table — data lives where it belongs
+> **Principle**: Bookshelf, not side-table  -  data lives where it belongs
 
 ---
 
@@ -10,17 +10,17 @@
 
 ### Why Wada?
 Wada's 348 combinations were curated for *harmony*, not trend. They feel warm,
-lived-in, and timeless — the opposite of the cold SaaS palettes that saturate
+lived-in, and timeless  -  the opposite of the cold SaaS palettes that saturate
 the web. This gives StarBrief a recognizable visual identity.
 
-### StarBrief Palette (Dark Mode — Primary)
+### StarBrief Palette (Dark Mode  -  Primary)
 
 Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 
 ```css
 :root {
     /* ═══════════════════════════════════════════════ */
-    /* StarBrief Tokens — Sanzo Wada Heritage         */
+    /* StarBrief Tokens  -  Sanzo Wada Heritage         */
     /* ═══════════════════════════════════════════════ */
 
     /* ─── Surfaces (Wada: darkened neutrals) ─── */
@@ -50,7 +50,7 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
     --border-subtle-light: rgba(26, 22, 20, 0.08);
 
     /* ─── Brand Accent (Wada: Raw Sienna #bb7125) ─── */
-    --accent:        #BB7125;  /* Raw Sienna — the "star" */
+    --accent:        #BB7125;  /* Raw Sienna  -  the "star" */
     --accent-hover:  #D4872E;  /* brightened sienna */
     --accent-muted:  rgba(187, 113, 37, 0.15);
 
@@ -78,12 +78,12 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
     /* CATEGORY COLORS (Wada-sourced tints)           */
     /* ═══════════════════════════════════════════════ */
 
-    --cat-internship:   #4B7D8D;  /* Gobelin Blue — structured, professional */
-    --cat-hackathon:    #DA525D;  /* Eugenia Red B — energetic, competitive */
-    --cat-workshop:     #D4872E;  /* bright sienna — hands-on, warm */
-    --cat-opensource:    #5B7745;  /* Cypress Green (Wada #486849) — growth */
-    --cat-research:     #8B6BAE;  /* Wisteria (Wada #7B5AA6 lightened) — deep */
-    --cat-conference:   #C7A84E;  /* Wada Golden Ochre — prestigious, curated */
+    --cat-internship:   #4B7D8D;  /* Gobelin Blue  -  structured, professional */
+    --cat-hackathon:    #DA525D;  /* Eugenia Red B  -  energetic, competitive */
+    --cat-workshop:     #D4872E;  /* bright sienna  -  hands-on, warm */
+    --cat-opensource:    #5B7745;  /* Cypress Green (Wada #486849)  -  growth */
+    --cat-research:     #8B6BAE;  /* Wisteria (Wada #7B5AA6 lightened)  -  deep */
+    --cat-conference:   #C7A84E;  /* Wada Golden Ochre  -  prestigious, curated */
 
     /* ═══════════════════════════════════════════════ */
     /* TYPOGRAPHY                                     */
@@ -148,7 +148,7 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 
 ---
 
-## 2. Information Architecture — The Bookshelf Principle
+## 2. Information Architecture  -  The Bookshelf Principle
 
 > *"If there is a bookshelf in the library, why store all books on the side table?"*
 
@@ -159,14 +159,14 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 | Opportunity record | `opportunities` DB table | Both views, cards, detail panel |
 | Category filter state | Sidebar (single source) | Both views read from it |
 | Priority filter state | Sidebar (single source) | Both views read from it |
-| View toggle (Task/Timeline) | Top bar — 2 buttons | Switches rendering, not data |
+| View toggle (Task/Timeline) | Top bar  -  2 buttons | Switches rendering, not data |
 | User profile | `/api/profile` | Scoring engine, sidebar counts |
 | Scraper health | `scraper_runs` table | Sidebar footer only |
 
 **What this eliminates**:
-- ❌ No duplicate category tabs + sidebar filters (was redundant)
-- ❌ No separate "filter panel" overlay (merged into sidebar)
-- ❌ No re-fetching data when switching views (same query, different render)
+-  No duplicate category tabs + sidebar filters (was redundant)
+-  No separate "filter panel" overlay (merged into sidebar)
+-  No re-fetching data when switching views (same query, different render)
 
 ---
 
@@ -176,52 +176,52 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ ★ StarBrief    [🔍 Search... ⌘K]    [☰ Tasks] [═ Timeline] │
+│  StarBrief    [ Search... ⌘K]    [☰ Tasks] [═ Timeline] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 - Two icon-buttons, right side of top bar
 - Active view: `--accent` underline + `--text-primary`
 - Inactive: `--text-muted`, no underline
-- Same data, different rendering — no re-fetch
+- Same data, different rendering  -  no re-fetch
 
 ---
 
 ### 3.2 Task View (Default)
 
-**Purpose**: "What should I act on NOW?" — prioritized, vertical, scannable.
+**Purpose**: "What should I act on NOW?"  -  prioritized, vertical, scannable.
 
 ```
 ┌─── SIDEBAR ────┐ ┌──────────── CONTENT ─────────────────────┐
 │                 │ │                                           │
 │ CATEGORIES      │ │  TODAY (Apr 14) ─────────────── 2 items   │
-│ ● All      (34) │ │                                           │
-│ ○ Intern   (12) │ │  ┌─ ● ─────────────────────────────────┐  │
-│ ○ Hack      (8) │ │  │ CRITICAL  GSoC 2026                 │  │
-│ ○ Work      (3) │ │  │ 2 days left · Open Source · Remote  │  │
-│ ○ OSS       (5) │ │  │                          [Apply →]  │  │
-│ ○ Research  (2) │ │  └─────────────────────────────────────┘  │
-│ ○ Conf      (4) │ │                                           │
-│                 │ │  ┌─ ● ─────────────────────────────────┐  │
+│  All      (34) │ │                                           │
+│  Intern   (12) │ │  ┌─  ─────────────────────────────────┐  │
+│  Hack      (8) │ │  │ CRITICAL  GSoC 2026                 │  │
+│  Work      (3) │ │  │ 2 days left · Open Source · Remote  │  │
+│  OSS       (5) │ │  │                          [Apply →]  │  │
+│  Research  (2) │ │  └─────────────────────────────────────┘  │
+│  Conf      (4) │ │                                           │
+│                 │ │  ┌─  ─────────────────────────────────┐  │
 │ ─ ─ ─ ─ ─ ─ ─ │ │  │ HIGH  IISc SPARK Research            │  │
 │                 │ │  │ Closes Apr 16 · Research · Bangalore │  │
 │ PRIORITY        │ │  │                          [Apply →]  │  │
-│ ◉ Critical  (3) │ │  └─────────────────────────────────────┘  │
-│ ◉ High      (9) │ │                                           │
-│ ◉ Medium   (15) │ │  THIS WEEK (Apr 14-20) ──────── 5 items  │
-│ ○ Low      (22) │ │  ┌──────────────────────────────────────┐ │
+│  Critical  (3) │ │  └─────────────────────────────────────┘  │
+│  High      (9) │ │                                           │
+│  Medium   (15) │ │  THIS WEEK (Apr 14-20) ──────── 5 items  │
+│  Low      (22) │ │  ┌──────────────────────────────────────┐ │
 │                 │ │  │ ...cards...                           │ │
 │ ─ ─ ─ ─ ─ ─ ─ │ │  └──────────────────────────────────────┘ │
 │                 │ │                                           │
 │ LOCATION        │ │  NEXT WEEK ──────────────────── 3 items   │
-│ ◉ Remote        │ │  ...                                      │
-│ ◉ Pan-India     │ │                                           │
-│ ◉ Global        │ │  ROLLING (No Deadline) ──────── 12 items  │
+│  Remote        │ │  ...                                      │
+│  Pan-India     │ │                                           │
+│  Global        │ │  ROLLING (No Deadline) ──────── 12 items  │
 │                 │ │  ...                                      │
 │ ─ ─ ─ ─ ─ ─ ─ │ │                                           │
 │                 │ └───────────────────────────────────────────┘
 │ PIPELINE        │
-│ ✓ 14/14 scrapers│
+│  14/14 scrapers│
 │ Last: 2:15 AM   │
 │ Next: Tomorrow  │
 └─────────────────┘
@@ -231,14 +231,14 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 - Category tabs `[All] [Intern] [Hack]...` are now sidebar radio buttons
 - Priority filter merged into sidebar
 - Location filter added to sidebar
-- All filters in ONE place — the sidebar IS the filter panel
+- All filters in ONE place  -  the sidebar IS the filter panel
 - Cards grouped by time bucket (TODAY → THIS WEEK → ROLLING)
 
 ---
 
 ### 3.3 Timeline View (Google Calendar-style)
 
-**Purpose**: "When does everything happen?" — temporal, horizontal, Gantt-like.
+**Purpose**: "When does everything happen?"  -  temporal, horizontal, Gantt-like.
 
 ```
 ┌─── SIDEBAR ────┐ ┌──────────── TIMELINE ──────────────────────────────┐
@@ -288,8 +288,8 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 | **Data query** | Same API: `GET /api/opportunities/timeline` | Same API |
 | **Grouping** | By time bucket (TODAY/WEEK/MONTH) | By date axis |
 | **Sort** | Priority ↓ then deadline ↑ | Deadline ↑ (chronological) |
-| **Default on desktop** | ✓ (task-focused) | |
-| **Default on mobile** | ✓ (cards work better) | |
+| **Default on desktop** |  (task-focused) | |
+| **Default on mobile** |  (cards work better) | |
 | **State preserved** | Sidebar filters persist across view switch |
 
 ---
@@ -300,7 +300,7 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 
 ```
 ┌─▌─────────────────────────────────────────────────────┐
-│▌  ● CRITICAL   GSoC 2026                              │
+│▌   CRITICAL   GSoC 2026                              │
 │▌  2 days left · Open Source · Remote    [Apply →]      │
 └─▌─────────────────────────────────────────────────────┘
     ▲
@@ -330,12 +330,12 @@ Derived from Wada combinations #247, #268, #131, #182, blended for screens:
 All filters live here. No separate tabs, no overlay panels.
 
 **Sections** (top to bottom):
-1. **Logo + View Toggle** — StarBrief logo, compact
-2. **Categories** — Radio buttons with counts, single-select or multi-select
-3. **Priority** — Checkboxes, checked by default except "Low"
-4. **Location** — Checkboxes (Remote / Pan-India / Global)
+1. **Logo + View Toggle**  -  StarBrief logo, compact
+2. **Categories**  -  Radio buttons with counts, single-select or multi-select
+3. **Priority**  -  Checkboxes, checked by default except "Low"
+4. **Location**  -  Checkboxes (Remote / Pan-India / Global)
 5. **Divider**
-6. **Pipeline Health** — Compact status line
+6. **Pipeline Health**  -  Compact status line
 
 **Interaction**: Changing any filter instantly re-renders both views (client-side filter, no re-fetch needed since all data is already loaded for the current time window).
 
@@ -343,7 +343,7 @@ All filters live here. No separate tabs, no overlay panels.
 
 ```
 ┌─────────────────────────────────────────────┐
-│  🔍  Search opportunities...           ⌘K   │
+│    Search opportunities...           ⌘K   │
 └─────────────────────────────────────────────┘
 ```
 
@@ -378,13 +378,13 @@ All Wada-derived colors checked against WCAG 2.1 AA on `#0C0A09`:
 
 | Token | Hex | Contrast Ratio | Pass? |
 |---|---|---|---|
-| `--text-primary` | `#E8E0D4` | 13.2:1 | ✅ AAA |
-| `--text-secondary` | `#B5A898` | 7.8:1 | ✅ AAA |
-| `--text-muted` | `#8A7E6E` | 4.6:1 | ✅ AA |
-| `--accent` | `#BB7125` | 4.7:1 | ✅ AA |
-| `--priority-critical` | `#CC1236` | 4.5:1 | ✅ AA |
-| `--priority-medium` | `#4B7D8D` | 4.5:1 | ✅ AA |
-| `--cat-hackathon` | `#DA525D` | 4.8:1 | ✅ AA |
+| `--text-primary` | `#E8E0D4` | 13.2:1 |  AAA |
+| `--text-secondary` | `#B5A898` | 7.8:1 |  AAA |
+| `--text-muted` | `#8A7E6E` | 4.6:1 |  AA |
+| `--accent` | `#BB7125` | 4.7:1 |  AA |
+| `--priority-critical` | `#CC1236` | 4.5:1 |  AA |
+| `--priority-medium` | `#4B7D8D` | 4.5:1 |  AA |
+| `--cat-hackathon` | `#DA525D` | 4.8:1 |  AA |
 
 ---
 
@@ -392,8 +392,8 @@ All Wada-derived colors checked against WCAG 2.1 AA on `#0C0A09`:
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| Color system | Sanzo Wada heritage | Warm, harmonious, unique identity — not generic SaaS |
-| Category tabs | Merged into sidebar | "Bookshelf" principle — filters in one place |
+| Color system | Sanzo Wada heritage | Warm, harmonious, unique identity  -  not generic SaaS |
+| Category tabs | Merged into sidebar | "Bookshelf" principle  -  filters in one place |
 | Views | Task (default) + Timeline | Task for action, Timeline for planning |
 | Timeline style | Google Calendar Gantt bars | Familiar mental model, shows duration not just deadline |
 | Sidebar | Always visible (desktop) | Filter state is always accessible, no hidden panels |

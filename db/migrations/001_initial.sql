@@ -1,5 +1,5 @@
 -- ══════════════════════════════════════════════════════════
--- StarBrief — Initial Schema Migration
+-- StarBrief  -  Initial Schema Migration
 -- Database: Neon PostgreSQL (free tier)
 -- Run: psql $DATABASE_URL -f db/migrations/001_initial.sql
 -- ══════════════════════════════════════════════════════════
@@ -143,15 +143,15 @@ CREATE INDEX IF NOT EXISTS idx_scores_user      ON user_opportunity_scores(user_
 CREATE INDEX IF NOT EXISTS idx_scores_priority  ON user_opportunity_scores(priority);
 CREATE INDEX IF NOT EXISTS idx_queue_processed  ON discovery_queue(processed);
 
--- ─── Seed Default Profile (Anunay) ──────────────────────
+-- ─── Seed Default Profile (Developer) ──────────────────────
 
 INSERT INTO user_profiles (name, email, year_of_study, graduation_year, degree, interests, filters, notification_prefs, scoring_weights)
 VALUES (
-    'Anunay',
+    'Developer',
     NULL,
-    2,
-    2028,
-    'B.Tech CS',
+    NULL,
+    NULL,
+    NULL,
     '{"primary":["AI","ML","NLP","LLM","Deep Learning","Data Science","ANN","CNN","Computer Vision","Generative AI","Reinforcement Learning","Natural Language Processing","Transformers"],"secondary":["Hackathons","Open Source","Research","Competitive Programming"],"negative":["Full Stack","Frontend Development","WordPress","Marketing","Sales","HR"]}',
     '{"locations":[],"paid_only":false,"female_exclusive":false,"min_stipend":null,"excluded_companies":["SSZONE Technologies"],"target_companies":[]}',
     '{"channels":["web_push"],"frequency":"daily_digest","digest_time":"08:00","quiet_hours":{"start":"22:00","end":"07:00"},"min_priority":"medium"}',

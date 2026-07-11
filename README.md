@@ -40,6 +40,54 @@ This is a personal tool first. It exists because the author got tired of missing
     └── requirements.txt            Pip-installable dependency list
 
 
+
+
+## System Architecture
+
+```mermaid
+graph TB
+    subgraph TRIGGER["Schedulers (Free, Cloud)"]
+        GHA["GitHub Actions\nCron Triggers"]
+        VCron["Vercel Cron\n(1x/day backup)"]
+    end
+
+    subgraph SCRAPE["Scraper Layer (Python)"]
+        direction LR
+        S_POOL["Scraper Pool\n14 source-specific scrapers"]
+        DISCO["Discovery Queue\n(daily breadcrumbs\nfor weekly crawler)"]
+    end
+
+    subgraph PROCESS["Processing Layer"]
+        FILTER["Rule-Based\nPre-Filter"]
+        DEDUP["Fuzzy\nDeduplicator"]
+        GEMINI["Gemini API\n(classify, summarize,\nscore)"]
+        VALID["URL Validator\n(HTTP HEAD)"]
+    end
+
+    subgraph STORE["Storage Layer"]
+        NEON["Neon PostgreSQL\n(Free Tier)"]
+    end
+
+    subgraph SERVE["Serving Layer"]
+        VAPI["Vercel API Routes\n(Next.js)"]
+        DASH["Calendar Dashboard\n(SSR + Client)"]
+        PWA["PWA Service Worker\n(push notifications)"]
+    end
+
+    GHA -->|"daily + weekly"| S_POOL
+    VCron -->|"daily backup"| VAPI
+    S_POOL --> DISCO
+    S_POOL --> FILTER
+    DISCO -->|"weekly only"| S_POOL
+    FILTER --> DEDUP
+    DEDUP --> GEMINI
+    GEMINI --> VALID
+    VALID --> NEON
+    NEON --> VAPI
+    VAPI --> DASH
+    VAPI --> PWA
+```
+
 ## How It Works
 
 The pipeline runs on a dual cadence, which is the main architectural idea.

@@ -1,10 +1,10 @@
-# StarBrief — Complete Architectural Blueprint
+# StarBrief  -  Complete Architectural Blueprint
 
 > **Project**: Automated CS Opportunity Intelligence Pipeline
-> **Codename**: StarBrief (inspired by A* — the optimal path finder + brief = concise intelligence)
-> **Author**: Anunay (design) + AntiGravity (architecture)
-> **Status**: ✅ APPROVED — Ready for implementation
-> **Design System**: See [design_research.md](file:///C:/Users/Anunay/.gemini/antigravity/brain/92b18d1a-d2f7-46c1-90f5-61bc2541fa2e/design_research.md) for full visual DNA
+> **Codename**: StarBrief (inspired by A*  -  the optimal path finder + brief = concise intelligence)
+> **Author**: Developer (design) + AntiGravity (architecture)
+> **Status**:  APPROVED  -  Ready for implementation
+> **Design System**: See [design_research.md](design_research.md) for full visual DNA
 
 ---
 
@@ -150,7 +150,7 @@ graph TB
 
 ### 4.1 The Incremental Coverage Strategy
 
-This is the key innovation — your idea of the daily checker doing "pre-work" for the weekly crawler, formalized:
+This is the key innovation  -  your idea of the daily checker doing "pre-work" for the weekly crawler, formalized:
 
 ```mermaid
 graph LR
@@ -181,7 +181,7 @@ graph LR
     W1 -->|"processed items"| KNOWN_DB
 ```
 
-### 4.2 Daily Sentinel — Specification
+### 4.2 Daily Sentinel  -  Specification
 
 **Trigger**: GitHub Actions cron, `0 2 * * *` (2:00 AM IST daily)
 **Runtime Budget**: ~10-15 minutes
@@ -196,7 +196,7 @@ graph LR
 | 5. Breadcrumb Drop | Store newly spotted URLs in `discovery_queue` table | Insert URL + source + context | ~10-50 DB inserts |
 | 6. Report | Log summary: "Checked 342 URLs, 5 expired, 12 breadcrumbs queued" | Structured JSON log | N/A |
 
-### 4.3 Weekly Deep Crawler — Specification
+### 4.3 Weekly Deep Crawler  -  Specification
 
 **Trigger**: GitHub Actions cron, `0 3 * * 0` (3:00 AM IST every Sunday)
 **Runtime Budget**: ~30-45 minutes
@@ -231,7 +231,7 @@ For each Source S:
         Flag for manual review (source may have changed structure)
 ```
 
-This ensures underperforming scrapers get MORE attention, not less — the system self-corrects.
+This ensures underperforming scrapers get MORE attention, not less  -  the system self-corrects.
 
 ---
 
@@ -307,7 +307,7 @@ class BaseScraper:
 | Field | Value |
 |---|---|
 | URL | `https://unstop.com/hackathons`, `/competitions`, `/internships` |
-| Method | API endpoint exists (`/api/public/opportunity/search-new`) — prefer API over scraping |
+| Method | API endpoint exists (`/api/public/opportunity/search-new`)  -  prefer API over scraping |
 | Daily | API call with date filter for updated listings |
 | Weekly | Full search with pagination: hackathons, coding challenges, case studies |
 | Auth | None for public API |
@@ -322,7 +322,7 @@ class BaseScraper:
 | Daily | Check first page of "upcoming" and "open" |
 | Weekly | Paginate. Filter by themes: AI, ML, Data, Health, Social Good |
 | Auth | None |
-| Gotchas | Clean HTML, easy to parse. Global focus — lots of results. |
+| Gotchas | Clean HTML, easy to parse. Global focus  -  lots of results. |
 | Extract | Title, host, themes, deadline, prizes, submission reqs, team size |
 
 #### S04: MLH (Major League Hacking)
@@ -353,7 +353,7 @@ class BaseScraper:
 |---|---|
 | URL | `https://konfhub.com/events` |
 | Method | `httpx` + BS4 |
-| Daily | No (weekly only — events don't change daily) |
+| Daily | No (weekly only  -  events don't change daily) |
 | Weekly | Scan tech events, filter: AI, ML, Cloud, Data |
 | Auth | None |
 | Extract | Event name, date, venue, fee, speakers, registration link |
@@ -614,16 +614,16 @@ graph LR
 
 Four autonomous strategies elevate the pipeline beyond a dumb scraper:
 
-#### Strategy A — Semantic Deduplication (Vector Memory)
+#### Strategy A  -  Semantic Deduplication (Vector Memory)
 Standard fuzzy string matching misses semantically identical jobs on multiple platforms. We use Google's free `text-embedding-004` model to generate a vector for each opportunity's title+description. Before inserting, cosine similarity is computed against opportunities from the last 14 days. If similarity ≥ 0.92 → append new source URL to existing record. Cost: zero. Deps: `google-generativeai`, `numpy`.
 
-#### Strategy B — Reflection Loop (Hallucination Catcher)
+#### Strategy B  -  Reflection Loop (Hallucination Catcher)
 Two-prompt Actor-Critic pattern. **Actor (Groq):** Extracts JSON. **Critic (Groq):** "Did the Actor hallucinate any dates or URLs not in the source text? YES/NO." If YES → re-route to Gemini Flash for careful re-extraction. Expected: ~15% fewer hallucinated deadlines. Cost: two Groq calls (<3s total, still free).
 
-#### Strategy C — Persona Critic (Deep Personalization)
-The LLM receives `default_profile.json` alongside the raw opportunity and produces a `relevance_score (0.0–1.0)` and one-sentence `relevance_justification`. Score stored in `user_opportunity_scores` and displayed as a contextual badge in the dashboard: *"⭐ 94% — Matches your Transformers interest, remote."*
+#### Strategy C  -  Persona Critic (Deep Personalization)
+The LLM receives `default_profile.json` alongside the raw opportunity and produces a `relevance_score (0.0-1.0)` and one-sentence `relevance_justification`. Score stored in `user_opportunity_scores` and displayed as a contextual badge in the dashboard: *" 94%  -  Matches your Transformers interest, remote."*
 
-#### Strategy D — Auto-Healing Scraper
+#### Strategy D  -  Auto-Healing Scraper
 If a scraper returns 0 results when it previously returned 50+, the anomaly detector passes the raw HTML to Gemini 1.5 Flash (1M context window) asking it to identify new CSS selectors. Selectors update in-memory for the current run. Cost: one Gemini call only on failure, zero during normal operation.
 
 ### 7.2 LLM Router (Groq → Gemini Cascade via LiteLLM)
@@ -857,9 +857,9 @@ No file syncing, no intermediary storage. GitHub Actions writes to the same DB t
 
 ## 9. Dashboard UI & Design System
 
-> **Color Source**: Sanzo Wada — *A Dictionary of Color Combinations* (1933)
+> **Color Source**: Sanzo Wada  -  *A Dictionary of Color Combinations* (1933)
 > **Layout**: Dual-view (Task + Timeline), unified sidebar filters
-> **Principle**: Bookshelf, not side-table — data lives where it belongs
+> **Principle**: Bookshelf, not side-table  -  data lives where it belongs
 
 ### 9.1 Design Philosophy
 
@@ -868,7 +868,7 @@ No file syncing, no intermediary storage. GitHub Actions writes to the same DB t
 | **Precision** | Strict 8px spacing grid, optical alignment |
 | **Breathing Room** | Generous whitespace (48px section gaps) |
 | **Quiet Depth** | Subtle shadows, 1px borders at 6-8% opacity |
-| **Warmth** | Sanzo Wada heritage palette — warm, not cold |
+| **Warmth** | Sanzo Wada heritage palette  -  warm, not cold |
 | **Instant Feel** | 100-150ms transitions, no sluggish animations |
 
 ### 9.2 Sanzo Wada Color Tokens
@@ -876,7 +876,7 @@ No file syncing, no intermediary storage. GitHub Actions writes to the same DB t
 ```css
 :root {
     /* ═══════════════════════════════════════════════ */
-    /* StarBrief Tokens — Sanzo Wada Heritage          */
+    /* StarBrief Tokens  -  Sanzo Wada Heritage          */
     /* ═══════════════════════════════════════════════ */
 
     /* ─── Surfaces (Wada: darkened neutrals) ─── */
@@ -906,7 +906,7 @@ No file syncing, no intermediary storage. GitHub Actions writes to the same DB t
     --border-subtle-light: rgba(26, 22, 20, 0.08);
 
     /* ─── Brand Accent (Wada: Raw Sienna #bb7125) ─── */
-    --accent:        #BB7125;  /* Raw Sienna — the "star" */
+    --accent:        #BB7125;  /* Raw Sienna  -  the "star" */
     --accent-hover:  #D4872E;
     --accent-muted:  rgba(187, 113, 37, 0.15);
 
@@ -969,11 +969,11 @@ Two views of the same data. Same sidebar, same filters, different rendering.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│ ★ StarBrief    [🔍 Search... ⌘K]       [☰ Tasks] [═ Timeline] │
+│  StarBrief    [ Search... ⌘K]       [☰ Tasks] [═ Timeline] │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-#### Task View (Default) — "What should I act on NOW?"
+#### Task View (Default)  -  "What should I act on NOW?"
 
 Vertical card list, grouped by time bucket, sorted by priority then deadline.
 
@@ -981,36 +981,36 @@ Vertical card list, grouped by time bucket, sorted by priority then deadline.
 ┌─── SIDEBAR ────┐ ┌──────────── CONTENT ─────────────────────┐
 │                 │ │                                           │
 │ CATEGORIES      │ │  TODAY (Apr 14) ─────────────── 2 items   │
-│ ● All      (34) │ │                                           │
-│ ○ Intern   (12) │ │  ┌─▌────────────────────────────────────┐  │
-│ ○ Hack      (8) │ │  │▌ ● CRITICAL  GSoC 2026              │  │
-│ ○ Work      (3) │ │  │▌ 2 days left · OSS · Remote [Apply→]│  │
-│ ○ OSS       (5) │ │  └─▌────────────────────────────────────┘  │
-│ ○ Research  (2) │ │                                           │
-│ ○ Conf      (4) │ │  ┌─▌────────────────────────────────────┐  │
-│                 │ │  │▌ ● HIGH  IISc SPARK Research         │  │
+│  All      (34) │ │                                           │
+│  Intern   (12) │ │  ┌─▌────────────────────────────────────┐  │
+│  Hack      (8) │ │  │▌  CRITICAL  GSoC 2026              │  │
+│  Work      (3) │ │  │▌ 2 days left · OSS · Remote [Apply→]│  │
+│  OSS       (5) │ │  └─▌────────────────────────────────────┘  │
+│  Research  (2) │ │                                           │
+│  Conf      (4) │ │  ┌─▌────────────────────────────────────┐  │
+│                 │ │  │▌  HIGH  IISc SPARK Research         │  │
 │ ─ ─ ─ ─ ─ ─ ─ │ │  │▌ Apr 16 · Research · Bangalore       │  │
 │                 │ │  └─▌────────────────────────────────────┘  │
 │ PRIORITY        │ │                                           │
-│ ◉ Critical  (3) │ │  THIS WEEK (Apr 14-20) ──────── 5 items  │
-│ ◉ High      (9) │ │  ...                                      │
-│ ◉ Medium   (15) │ │                                           │
-│ ○ Low      (22) │ │  ROLLING (No Deadline) ──────── 12 items  │
+│  Critical  (3) │ │  THIS WEEK (Apr 14-20) ──────── 5 items  │
+│  High      (9) │ │  ...                                      │
+│  Medium   (15) │ │                                           │
+│  Low      (22) │ │  ROLLING (No Deadline) ──────── 12 items  │
 │                 │ │  ...                                      │
 │ ─ ─ ─ ─ ─ ─ ─ │ └───────────────────────────────────────────┘
 │                 │
 │ LOCATION        │
-│ ◉ Remote        │
-│ ◉ Pan-India     │
-│ ◉ Global        │
+│  Remote        │
+│  Pan-India     │
+│  Global        │
 │                 │
 │ ─ ─ ─ ─ ─ ─ ─ │
-│ ✓ 14/14 scrapers│
+│  14/14 scrapers│
 │ Last: 2:15 AM   │
 └─────────────────┘
 ```
 
-#### Timeline View — "When does everything happen?"
+#### Timeline View  -  "When does everything happen?"
 
 Google Calendar-style horizontal Gantt bars showing opportunity date ranges.
 
@@ -1049,7 +1049,7 @@ Google Calendar-style horizontal Gantt bars showing opportunity date ranges.
 
 ```
 ┌─▌───────────────────────────────────────────────────────┐
-│▌  ● CRITICAL   Google Summer of Code 2026         [✕]   │
+│▌   CRITICAL   Google Summer of Code 2026         [✕]   │
 ├─▌───────────────────────────────────────────────────────┤
 │▌                                                        │
 │▌  Organization   Google / Open Source                    │
@@ -1062,12 +1062,12 @@ Google Calendar-style horizontal Gantt bars showing opportunity date ranges.
 │▌  project over summer. Stipend provided by Google.       │
 │▌                                                        │
 │▌  Skills    Python  Git  C++                             │
-│▌  Stipend   $1,500 – $6,600                              │
+│▌  Stipend   $1,500 - $6,600                              │
 │▌                                                        │
 │▌  Source: summerofcode.withgoogle.com                    │
 │▌  Verified: Apr 14, 2:15 AM                              │
 │▌                                                        │
-│▌  [Apply Now →]        [Dismiss]        [★ Save]         │
+│▌  [Apply Now →]        [Dismiss]        [ Save]         │
 └─▌───────────────────────────────────────────────────────┘
 ```
 
@@ -1076,12 +1076,12 @@ Google Calendar-style horizontal Gantt bars showing opportunity date ranges.
 All filters merged into one panel. No separate filter overlay, no tab bar.
 
 **Sections** (top to bottom):
-1. **Logo** — StarBrief wordmark
-2. **Categories** — Radio/checkbox with counts
-3. **Priority** — Checkboxes (Critical/High/Medium checked by default)
-4. **Location** — Checkboxes (Remote/Pan-India/Global)
+1. **Logo**  -  StarBrief wordmark
+2. **Categories**  -  Radio/checkbox with counts
+3. **Priority**  -  Checkboxes (Critical/High/Medium checked by default)
+4. **Location**  -  Checkboxes (Remote/Pan-India/Global)
 5. **Divider**
-6. **Pipeline Health** — Compact status (scraper count, last/next crawl)
+6. **Pipeline Health**  -  Compact status (scraper count, last/next crawl)
 
 Changing any filter re-renders both views instantly (client-side, no re-fetch).
 
@@ -1100,8 +1100,8 @@ Changing any filter re-renders both views instantly (client-side, no re-fetch).
 | Best for | "What to apply for now?" | "What's the landscape?" |
 | Grouping | By time bucket | By date axis |
 | Sort | Priority ↓ then deadline ↑ | Deadline ↑ (chronological) |
-| Default (desktop) | ✓ | |
-| Default (mobile) | ✓ | |
+| Default (desktop) |  | |
+| Default (mobile) |  | |
 | Sidebar filters | Persist across view switch |
 
 ---
@@ -1164,16 +1164,11 @@ When the API is stable (~2 months), build a minimal Android app:
 
 ## 11. User Personalization System
 
-### 11.1 Default Profile (Anunay — Phase 1)
+### 11.1 Default Profile (Developer  -  Phase 1)
 
 ```json
 {
-    "profile": {
-        "name": "Anunay",
-        "year_of_study": 2,
-        "graduation_year": 2028,
-        "degree": "B.Tech CS"
-    },
+    
     "interests": {
         "primary": [
             "AI", "ML", "NLP", "LLM", "Deep Learning",
@@ -1216,7 +1211,7 @@ When the API is stable (~2 months), build a minimal Android app:
 
 ### 11.2 Settings Page (Phase 2)
 
-The dashboard will have a `/settings` page where users can modify their profile via a form — no JSON editing needed. Changes trigger `POST /api/profile` and then `POST /api/trigger/recompute-scores`.
+The dashboard will have a `/settings` page where users can modify their profile via a form  -  no JSON editing needed. Changes trigger `POST /api/profile` and then `POST /api/trigger/recompute-scores`.
 
 ### 11.3 Multi-User (Phase 3)
 
@@ -1426,4 +1421,4 @@ star-brief/
 | Q3 | Dashboard language | **TypeScript** |
 | Q4 | Repo structure | **Monorepo** (`star-brief/` with Python scrapers + Next.js dashboard) |
 | Q5 | Initial scrapers | **6 core**: Internshala, Unstop, DevPost, MLH, GitHub Issues, Konfhub |
-| Q6 | Design direction | **Modernly minimalistic, Macintosh-y** — see [design_research.md](file:///C:/Users/Anunay/.gemini/antigravity/brain/92b18d1a-d2f7-46c1-90f5-61bc2541fa2e/design_research.md) |
+| Q6 | Design direction | **Modernly minimalistic, Macintosh-y**  -  see [design_research.md](design_research.md) |
